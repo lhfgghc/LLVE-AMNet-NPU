@@ -1,5 +1,5 @@
 # Training outputs
-outputs/
+# outputs/
 logs/
 
 # Checkpoints (large .pth files)
