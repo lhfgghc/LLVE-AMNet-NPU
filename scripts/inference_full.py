@@ -1,7 +1,6 @@
 import os
 import sys
 import glob
-import time
 import argparse
 
 import torch
@@ -83,10 +82,7 @@ def infer_clip(model, clip_dir, output_dir, device):
     x = torch.stack(frames, dim=0).to(device)
     print(f"  Input: {len(frames)} frames, shape {list(x.shape)}")
 
-    t0 = time.time()
     out = model.inference_video(x)
-    elapsed = time.time() - t0
-    print(f"  Inference: {elapsed:.2f}s ({len(frames)/elapsed:.1f} fps)")
 
     for i, t in enumerate(out):
         arr = (t.cpu().clamp(0, 1).permute(1, 2, 0).numpy() * 255).astype(np.uint8)
