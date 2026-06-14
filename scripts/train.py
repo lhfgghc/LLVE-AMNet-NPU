@@ -134,12 +134,14 @@ if __name__ == "__main__":
 
     print("Building model...")
 
-    if hasattr(torch, "npu") and torch.npu.is_available():
-        device = torch.device("npu")
-    elif torch.cuda.is_available():
-        device = torch.device("cuda")
-    else:
-        device = torch.device("cpu")
+    try:
+        import torch_npu
+        if torch_npu.npu.is_available():
+            device = torch.device("npu")
+        else:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    except ImportError:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = AMNet(**cfg["model"]).to(device)
 
     train_cfg = cfg.get("train", {})

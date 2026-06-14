@@ -10,5 +10,9 @@ def set_seed(seed):
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-    if hasattr(torch, "npu") and torch.npu.is_available():
-        torch.npu.manual_seed_all(seed)
+    try:
+        import torch_npu
+        if torch_npu.npu.is_available():
+            torch.npu.manual_seed_all(seed)
+    except ImportError:
+        pass

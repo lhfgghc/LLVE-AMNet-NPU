@@ -43,8 +43,12 @@ DEFAULT_OUTPUT = os.path.join(amnet_path, "demo_videos", "outputs")
 def get_device(pref=None):
     if pref:
         return torch.device(pref)
-    if hasattr(torch, "npu") and torch.npu.is_available():
-        return torch.device("npu")
+    try:
+        import torch_npu
+        if torch_npu.npu.is_available():
+            return torch.device("npu")
+    except ImportError:
+        pass
     if torch.cuda.is_available():
         return torch.device("cuda")
     return torch.device("cpu")
